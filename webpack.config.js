@@ -4,52 +4,52 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js', // Входной файл
+  entry: './src/index.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: 'auto', // Обязательно для Module Federation
+    publicPath: 'auto',
   },
   devServer: {
     port: 3001, // Порт для хостового приложения
     static: path.join(__dirname, 'dist'),
     hot: true,
-    open: true, // Автоматически открывать приложение в браузере
+    open: true,
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/, // Обработка JavaScript и JSX файлов
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'], // Поддержка React и современных возможностей JS
+            presets: ['@babel/preset-env', '@babel/preset-react'],
           },
         },
       },
       {
-        test: /\.css$/, // Обработка CSS файлов
+        test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(png|jpe?g|gif|svg)$/i, // Обработка изображений
+        test: /\.(png|jpe?g|gif|svg)$/i,
         type: 'asset/resource',
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './public/index.html', // Убедитесь, что `public/index.html` существует
+      template: './public/index.html',
     }),
     new ModuleFederationPlugin({
-      name: 'hostApp', // Имя хоста
+      name: 'hostApp',
       remotes: {
         remoteApp: 'remoteApp@http://localhost:3002/remoteEntry.js', // URL удалённого приложения
       },
     }),
   ],
   resolve: {
-    extensions: ['.js', '.jsx'], // Расширения файлов, которые можно пропускать в импортах
+    extensions: ['.js', '.jsx'],
   },
 };
